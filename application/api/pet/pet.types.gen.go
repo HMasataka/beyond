@@ -4,7 +4,7 @@
 package pet
 
 import (
-	externalRef0 "github.com/caravan-inc/fankey-api-generator/domain/model"
+	externalRef0 "github.com/caravan-inc/fankey-server/domain/model"
 )
 
 // ListPetResponse defines model for ListPetResponse.
