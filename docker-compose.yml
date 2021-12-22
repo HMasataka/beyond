@@ -19,3 +19,43 @@ services:
     volumes:
       - ./application:/go/src/app/application
       - ./domain:/go/src/app/domain
+
+  sqlboiler:
+    build:
+      context: tools
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/go/src/app
+    networks:
+      - mysql-network
+
+  mysql:
+    image: mysql:8.0.27
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    restart: always
+    networks:
+      - mysql-network
+
+  create:
+    image: mysql:8.0.27
+    volumes:
+      - ./ddl:/tmp/ddl
+    command: bash -c 'mysql -hmysql -uuser -ppassword db < /tmp/ddl/schema.sql'
+    networks:
+      - mysql-network
+
+  cli:
+    image: mysql:8.0.27
+    networks:
+      - mysql-network
+    command: mysql -hmysql -uuser -ppassword db
+
+networks:
+  mysql-network:
+    driver: bridge
