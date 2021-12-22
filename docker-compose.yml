@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  ui:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./openapi.yaml:/openapi.yaml
+      - ./param.yaml:/param.yaml
+    environment:
+      SWAGGER_JSON: /openapi.yaml
+
+  oapi-codegen:
+    build:
+      context: oapi-generator
+      dockerfile: Dockerfile
+    volumes:
+      - ./application:/go/src/app/application
+      - ./domain:/go/src/app/domain
