@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/deepmap/oapi-codegen v1.9.0
 	github.com/friendsofgo/errors v0.9.2
+	github.com/getkin/kin-openapi v0.80.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
