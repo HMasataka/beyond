@@ -1,0 +1,37 @@
+name: migration
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ddl/**'
+  pull_request:
+    paths:
+      - 'ddl/**'
+
+jobs:
+  mysql8_0:
+    name: mysql_migration_test
+    runs-on: ubuntu-18.04
+    services:
+      mysql:
+        image: mysql:8.0.27
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: migration
+        run: mysql --protocol=tcp -h localhost -P 3306 -u user -ppassword db < ddl/schema.sql
+
