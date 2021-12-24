@@ -2,7 +2,13 @@ name: migration
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - 'ddl/**'
   pull_request:
+    paths:
+      - 'ddl/**'
 
 jobs:
   mysql8_0:
