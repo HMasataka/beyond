@@ -12,7 +12,7 @@ import (
 	"path"
 	"strings"
 
-	externalRef0 "github.com/caravan-inc/fankey-server/domain/model"
+	externalRef0 "github.com/caravan-inc/fankey-server/application/api/params"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
