@@ -4,6 +4,7 @@
 package user
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -14,14 +15,15 @@ import (
 type ServerInterface interface {
 	// PostUser
 	// (POST /users)
-	PostUser(w http.ResponseWriter, r *http.Request)
+	PostUser(w http.ResponseWriter, r *http.Request) (interface{}, error)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
 type ServerInterfaceWrapper struct {
-	Handler            ServerInterface
-	HandlerMiddlewares []MiddlewareFunc
-	ErrorHandlerFunc   func(w http.ResponseWriter, r *http.Request, err error)
+	Handler             ServerInterface
+	HandlerMiddlewares  []MiddlewareFunc
+	ResponseHandlerFunc func(w http.ResponseWriter, r *http.Request, res interface{}) error
+	ErrorHandlerFunc    func(w http.ResponseWriter, r *http.Request, err error)
 }
 
 type MiddlewareFunc func(http.HandlerFunc) http.HandlerFunc
@@ -31,7 +33,16 @@ func (siw *ServerInterfaceWrapper) PostUser(w http.ResponseWriter, r *http.Reque
 	ctx := r.Context()
 
 	var handler = func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostUser(w, r)
+		res, err := siw.Handler.PostUser(w, r)
+		if err != nil {
+			siw.ErrorHandlerFunc(w, r, err)
+			return
+		}
+		err = siw.ResponseHandlerFunc(w, r, res)
+		if err != nil {
+			siw.ErrorHandlerFunc(w, r, err)
+			return
+		}
 	}
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -116,10 +127,11 @@ func Handler(si ServerInterface) http.Handler {
 }
 
 type ChiServerOptions struct {
-	BaseURL          string
-	BaseRouter       chi.Router
-	Middlewares      []MiddlewareFunc
-	ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
+	BaseURL             string
+	BaseRouter          chi.Router
+	Middlewares         []MiddlewareFunc
+	ResponseHandlerFunc func(w http.ResponseWriter, r *http.Request, res interface{}) error
+	ErrorHandlerFunc    func(w http.ResponseWriter, r *http.Request, err error)
 }
 
 // HandlerFromMux creates http.Handler with routing matching OpenAPI spec based on the provided mux.
@@ -148,10 +160,26 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 	}
+	if options.ResponseHandlerFunc == nil {
+		options.ResponseHandlerFunc = func(w http.ResponseWriter, r *http.Request, res interface{}) error {
+			w.WriteHeader(http.StatusOK)
+			if res != nil {
+				w.Header().Set("Content-Type", "application/json")
+				responseBytes, err := json.Marshal(res)
+				if err != nil {
+					return err
+				}
+				_, err = w.Write(responseBytes)
+				return err
+			}
+			return nil
+		}
+	}
 	wrapper := ServerInterfaceWrapper{
-		Handler:            si,
-		HandlerMiddlewares: options.Middlewares,
-		ErrorHandlerFunc:   options.ErrorHandlerFunc,
+		Handler:             si,
+		HandlerMiddlewares:  options.Middlewares,
+		ErrorHandlerFunc:    options.ErrorHandlerFunc,
+		ResponseHandlerFunc: options.ResponseHandlerFunc,
 	}
 
 	r.Group(func(r chi.Router) {

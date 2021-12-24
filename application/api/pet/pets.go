@@ -1,10 +1,7 @@
 package pet
 
 import (
-	"fmt"
 	"net/http"
-
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 func NewPet() *Pet {
@@ -14,17 +11,11 @@ func NewPet() *Pet {
 type Pet struct {
 }
 
-func (p *Pet) ListPets(w http.ResponseWriter, r *http.Request, params ListPetsParams) {
-	ctx := r.Context()
-
-	user := ctx.Value("user").(string)
-	requestID := middleware.GetReqID(ctx)
-
-	w.Write([]byte(fmt.Sprintf("hi %s\n", user)))
-	w.Write([]byte(fmt.Sprintf("your ID is %s\n", requestID)))
+func (p *Pet) ListPets(w http.ResponseWriter, r *http.Request, params ListPetsParams) (interface{}, error) {
+	id := "pet_id"
+	return ListPetResponse{Id: &id}, nil
 }
 
-func (p *Pet) FindPets(w http.ResponseWriter, r *http.Request) {
-	user := r.Context().Value("user").(string)
-	w.Write([]byte(fmt.Sprintf("hi %s", user)))
+func (p *Pet) FindPets(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	return nil, nil
 }

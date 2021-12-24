@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -12,7 +11,6 @@ func NewUser() *User {
 type User struct {
 }
 
-func (u *User) PostUser(w http.ResponseWriter, r *http.Request) {
-	user := r.Context().Value("user").(string)
-	w.Write([]byte(fmt.Sprintf("hi %s", user)))
+func (u *User) PostUser(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	return nil, nil
 }
