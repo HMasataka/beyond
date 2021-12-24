@@ -41,11 +41,11 @@ services:
     networks:
       - mysql-network
 
-  create:
-    image: mysql:8.0.27
+  migrate:
+    image: migrate/migrate:v4.15.1
     volumes:
       - ./ddl:/tmp/ddl
-    command: bash -c 'mysql -hmysql -uuser -ppassword db < /tmp/ddl/schema.sql'
+    command: ["-path", "/tmp/ddl", "-database",  "mysql://user:password@tcp(mysql:3306)/db", "up"]
     networks:
       - mysql-network
 
