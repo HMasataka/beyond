@@ -56,6 +56,8 @@ services:
     image: ghcr.io/k1low/tbls:v1.54.2
     volumes:
       - ./doc:/doc
+      - ./_tbls/.tbls.yml:/.tbls.yml
+      - ./_tbls/templates:/templates
     networks:
       - mysql-network
     command: doc mysql://user:password@mysql:3306/db /doc/database --rm-dist
