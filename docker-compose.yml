@@ -18,12 +18,15 @@ services:
 
   sqlboiler:
     build:
-      context: tools
+      context: tools/sqlboiler
       dockerfile: Dockerfile
+    working_dir: /worker
     volumes:
-      - ./:/go/src/app
+      - ./tools/sqlboiler/sqlboiler.toml:/worker/sqlboiler.toml
+      - ./domain/model:/worker/domain/model
     networks:
       - mysql-network
+    command: mysql
 
   mysql:
     image: mysql:8.0.27
