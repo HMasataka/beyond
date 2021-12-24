@@ -52,6 +52,14 @@ services:
       - mysql-network
     command: mysql -hmysql -uuser -ppassword db
 
+  tbls:
+    image: ghcr.io/k1low/tbls:v1.54.2
+    volumes:
+      - ./doc:/doc
+    networks:
+      - mysql-network
+    command: doc mysql://user:password@mysql:3306/db /doc/database --rm-dist
+
 networks:
   mysql-network:
     driver: bridge
