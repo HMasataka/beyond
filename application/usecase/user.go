@@ -4,13 +4,14 @@ import (
 	"context"
 
 	"github.com/caravan-inc/fankey-server/domain/model"
+	"github.com/caravan-inc/fankey-server/domain/model/inventory"
 	"github.com/caravan-inc/fankey-server/domain/repository"
 	"github.com/caravan-inc/fankey-server/transactor"
 )
 
 type UserUseCase interface {
 	Insert(ctx context.Context, userID, name string) error
-	Find(ctx context.Context, userID string) (*model.User, error)
+	Find(ctx context.Context, userID string) (inventory.User, error)
 }
 
 type userUseCase struct {
@@ -36,12 +37,12 @@ func (u *userUseCase) Insert(ctx context.Context, userID, name string) error {
 	return err
 }
 
-func (u *userUseCase) Find(ctx context.Context, userID string) (*model.User, error) {
+func (u *userUseCase) Find(ctx context.Context, userID string) (inventory.User, error) {
 	var user *model.User
 	err := u.transactor.Required(ctx, func(ctx context.Context) error {
 		var err error
 		user, err = u.userRepository.Find(ctx, userID)
 		return err
 	})
-	return user, err
+	return inventory.NewUserFrom(user), err
 }
