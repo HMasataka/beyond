@@ -1,0 +1,57 @@
+# https://golangci-lint.run/usage/linters
+run:
+  skip-files:
+    - test\.go
+
+linters-settings:
+  govet:
+    check-shadowing: true
+  misspell:
+    locale: US
+  dupl:
+    threshold: 150
+  nestif:
+    min-complexity: 5
+  forbidigo:
+    forbid:
+      - 'fmt\.Print.*'
+
+linters:
+  disable-all: true
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - gosimple
+    - structcheck
+    - varcheck
+    - ineffassign
+    - deadcode
+    - typecheck
+    - stylecheck
+    - gosec
+    - gofmt
+    - goimports
+    - misspell
+    - unparam
+    - wastedassign
+    - prealloc
+    - unconvert
+    - nestif
+    - nilnil
+    - bodyclose
+    - contextcheck
+    - durationcheck
+    - errorlint
+    - exportloopref
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - goconst
+    - makezero
+    - nilerr
+    - predeclared
+    - tagliatelle
+    - thelper
+    - whitespace
+    - wsl
