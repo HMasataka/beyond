@@ -8,9 +8,22 @@ import (
 	"fmt"
 	"net/http"
 
+	externalRef0 "github.com/caravan-inc/fankey-server/application/api/params"
+	externalRef1 "github.com/caravan-inc/fankey-server/application/api/payload"
 	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/go-chi/chi/v5"
 )
+
+// ListPetsParams defines parameters for ListPets.
+type ListPetsParams struct {
+	SortBy *externalRef0.SortBy `json:"sortBy,omitempty"`
+}
+
+// FindPetsJSONBody defines parameters for FindPets.
+type FindPetsJSONBody externalRef1.PostPetRequest
+
+// FindPetsJSONRequestBody defines body for FindPets for application/json ContentType.
+type FindPetsJSONRequestBody FindPetsJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {

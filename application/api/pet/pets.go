@@ -2,6 +2,8 @@ package pet
 
 import (
 	"net/http"
+
+	"github.com/caravan-inc/fankey-server/application/api/payload"
 )
 
 func NewPet() *Pet {
@@ -13,7 +15,7 @@ type Pet struct {
 
 func (p *Pet) ListPets(w http.ResponseWriter, r *http.Request, params ListPetsParams) (interface{}, error) {
 	id := "pet_id"
-	return ListPetResponse{Id: &id}, nil
+	return payload.ListPetResponse{Id: &id}, nil
 }
 
 func (p *Pet) FindPets(w http.ResponseWriter, r *http.Request) (interface{}, error) {

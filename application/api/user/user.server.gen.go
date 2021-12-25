@@ -8,8 +8,15 @@ import (
 	"fmt"
 	"net/http"
 
+	externalRef1 "github.com/caravan-inc/fankey-server/application/api/payload"
 	"github.com/go-chi/chi/v5"
 )
+
+// PostUserJSONBody defines parameters for PostUser.
+type PostUserJSONBody externalRef1.PostUserRequest
+
+// PostUserJSONRequestBody defines body for PostUser for application/json ContentType.
+type PostUserJSONRequestBody PostUserJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {

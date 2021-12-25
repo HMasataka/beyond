@@ -10,11 +10,10 @@ services:
       - ./domain:/go/src/app/domain
     command: >
       bash -c 'oapi-codegen -generate types,spec,skip-prune -package model param.yaml > application/api/params/param.gen.go && \
-              oapi-codegen -generate spec -package api -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params openapi.yaml > application/api/spec.types.gen.go && \
-              oapi-codegen -generate types -package pet -include-tags=pet -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params openapi.yaml > application/api/pet/pet.types.gen.go && \
-              oapi-codegen -templates template -generate chi-server -package pet -include-tags=pet -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params openapi.yaml > application/api/pet/pet.server.gen.go && \
-              oapi-codegen -generate types -package user -include-tags=user -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params openapi.yaml > application/api/user/user.types.gen.go && \
-              oapi-codegen -templates template -generate chi-server -package user -include-tags=user -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params openapi.yaml > application/api/user/user.server.gen.go'
+              oapi-codegen -generate types,spec,skip-prune -package payload payload.yaml > application/api/payload/payload.gen.go && \
+              oapi-codegen -generate spec -package api -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params,./payload.yaml:github.com/caravan-inc/fankey-server/application/api/payload openapi.yaml > application/api/spec.types.gen.go && \
+              oapi-codegen -templates template -generate chi-server,types -package pet -include-tags=pet -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params,./payload.yaml:github.com/caravan-inc/fankey-server/application/api/payload openapi.yaml > application/api/pet/pet.server.gen.go && \
+              oapi-codegen -templates template -generate chi-server,types -package user -include-tags=user -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params,./payload.yaml:github.com/caravan-inc/fankey-server/application/api/payload openapi.yaml > application/api/user/user.server.gen.go'
 
   sqlboiler:
     build:
