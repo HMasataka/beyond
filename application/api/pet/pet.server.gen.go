@@ -19,11 +19,11 @@ type ListPetsParams struct {
 	SortBy *externalRef0.SortBy `json:"sortBy,omitempty"`
 }
 
-// FindPetsJSONBody defines parameters for FindPets.
-type FindPetsJSONBody externalRef1.PostPetRequest
+// PostPetJSONBody defines parameters for PostPet.
+type PostPetJSONBody externalRef1.PostPetRequest
 
-// FindPetsJSONRequestBody defines body for FindPets for application/json ContentType.
-type FindPetsJSONRequestBody FindPetsJSONBody
+// PostPetJSONRequestBody defines body for PostPet for application/json ContentType.
+type PostPetJSONRequestBody PostPetJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -32,7 +32,7 @@ type ServerInterface interface {
 	ListPets(w http.ResponseWriter, r *http.Request, params ListPetsParams) (interface{}, error)
 	// Returns all pets
 	// (POST /pets)
-	FindPets(w http.ResponseWriter, r *http.Request) (interface{}, error)
+	PostPet(w http.ResponseWriter, r *http.Request) (interface{}, error)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -85,12 +85,12 @@ func (siw *ServerInterfaceWrapper) ListPets(w http.ResponseWriter, r *http.Reque
 	handler(w, r.WithContext(ctx))
 }
 
-// FindPets operation middleware
-func (siw *ServerInterfaceWrapper) FindPets(w http.ResponseWriter, r *http.Request) {
+// PostPet operation middleware
+func (siw *ServerInterfaceWrapper) PostPet(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var handler = func(w http.ResponseWriter, r *http.Request) {
-		res, err := siw.Handler.FindPets(w, r)
+		res, err := siw.Handler.PostPet(w, r)
 		if err != nil {
 			siw.ErrorHandlerFunc(w, r, err)
 			return
@@ -243,7 +243,7 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Get(options.BaseURL+"/pets", wrapper.ListPets)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/pets", wrapper.FindPets)
+		r.Post(options.BaseURL+"/pets", wrapper.PostPet)
 	})
 
 	return r

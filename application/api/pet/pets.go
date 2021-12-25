@@ -18,6 +18,7 @@ func (p *Pet) ListPets(w http.ResponseWriter, r *http.Request, params ListPetsPa
 	return payload.ListPetResponse{Id: &id}, nil
 }
 
-func (p *Pet) FindPets(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	return nil, nil
+func (p *Pet) PostPet(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	id := "pet_id"
+	return payload.PostPetResponse{Id: &id}, nil
 }
