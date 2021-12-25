@@ -24,6 +24,7 @@ func withUserID(next http.Handler) http.Handler {
 
 func main() {
 	var port = flag.Int("port", 8080, "Port for test HTTP server")
+
 	flag.Parse()
 
 	petStore := pet.NewPet()

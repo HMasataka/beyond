@@ -34,15 +34,18 @@ func (u *userUseCase) Insert(ctx context.Context, userID, name string) error {
 	err := u.transactor.Required(ctx, func(ctx context.Context) error {
 		return u.userRepository.Insert(ctx, &user)
 	})
+
 	return err
 }
 
 func (u *userUseCase) Find(ctx context.Context, userID string) (inventory.User, error) {
 	var user *model.User
+
 	err := u.transactor.Required(ctx, func(ctx context.Context) error {
 		var err error
 		user, err = u.userRepository.Find(ctx, userID)
 		return err
 	})
+
 	return inventory.NewUserFrom(user), err
 }

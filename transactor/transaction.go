@@ -45,6 +45,7 @@ func (t *transactor) Required(ctx context.Context, fn DoInTransaction, options .
 	if ctx.Value(contextKey(t.shardKeyProvider(ctx))) != nil {
 		return fn(ctx)
 	}
+
 	return t.RequiresNew(ctx, fn, options...)
 }
 
@@ -53,16 +54,20 @@ func (t *transactor) RequiresNew(ctx context.Context, fn DoInTransaction, option
 	for _, opt := range options {
 		opt.Apply(&config)
 	}
+
 	db := t.connectionProvider.CurrentConnection(ctx)
+
 	tx, err := db.BeginTx(ctx, &sql.TxOptions{
 		ReadOnly: config.ReadOnly,
 	})
 	if err != nil {
 		return err
 	}
+
 	defer func() {
 		if p := recover(); p != nil {
 			_ = tx.Rollback()
+
 			panic(p)
 		} else if err != nil {
 			_ = tx.Rollback()
@@ -74,6 +79,8 @@ func (t *transactor) RequiresNew(ctx context.Context, fn DoInTransaction, option
 			}
 		}
 	}()
+
 	err = fn(context.WithValue(ctx, contextKey(t.shardKeyProvider(ctx)), tx))
+
 	return
 }

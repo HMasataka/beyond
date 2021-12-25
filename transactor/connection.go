@@ -42,6 +42,7 @@ func NewShardConnectionProvider(db []*sql.DB, maxSlot uint32, shardKeyProvider S
 func (p *ShardConnectionProvider) CurrentConnection(ctx context.Context) Conn {
 	shardKey := p.shardKeyProvider(ctx)
 	index := GetShardingIndex([]byte(shardKey), p.maxSlot)
+
 	return p.db[index]
 }
 
