@@ -42,6 +42,11 @@ jobs:
       - name: migration up
         run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db up
 
+      - name: generate db document
+        uses: ghcr.io/k1low/tbls:v1.54.2
+        with:
+          args: doc mysql://user:password@mysql:3306/db /doc/database --rm-dist
+
       - name: migration down
         run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
 
