@@ -37,7 +37,7 @@ jobs:
         run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz
 
       - name: mv migration tool
-        run: mv migrate /bin
+        run: sudo mv migrate /bin
 
       - name: migration up
         run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db up
