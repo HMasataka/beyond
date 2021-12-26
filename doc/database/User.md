@@ -1,4 +1,4 @@
-# Card
+# User
 
 ## Description
 
@@ -6,12 +6,10 @@
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
-CREATE TABLE `Card` (
+CREATE TABLE `User` (
   `id` varchar(255) NOT NULL,
-  `user_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `Card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ```
 
@@ -21,26 +19,24 @@ CREATE TABLE `Card` (
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | varchar(255) |  | false |  |  |  |
-| user_id | varchar(255) |  | false |  | [Users](Users.md) |  |
+| id | varchar(255) |  | false | [Pet](Pet.md) |  |  |
+| name | varchar(255) |  | false |  |  |  |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| Card_ibfk_1 | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES Users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| user_id | KEY user_id (user_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
 
-![er](Card.svg)
+![er](User.svg)
 
 ---
 

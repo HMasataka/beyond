@@ -32,9 +32,29 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
       - name: download migration tool
-        run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz
+        run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz -C /opt
+
       - name: migration up
-        run: ./migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db up
+        run: /opt/migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db up
+
+      - name: generate db document
+        uses: docker://ghcr.io/k1low/tbls:v1.54.2
+        with:
+          args: doc mysql://user:password@mysql:3306/db doc/database --rm-dist
+
       - name: migration down
-        run: ./migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
+        run: /opt/migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
+
+      - name: Count changes
+        id: changes
+        run: |
+          git add -N .
+          echo "::set-output name=count::$(git diff --name-only | wc -l)"
+
+      - name: error if changes by tbls does not 0
+        if: steps.changes.outputs.count > 0
+        run: |
+          echo "::error::Please Update database document by tbls"
+          exit 1
