@@ -32,9 +32,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
       - name: download migration tool
         run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz
+
+      - name: mv migration tool
+        run: mv migrate /bin
+
       - name: migration up
-        run: ./migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db up
+        run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db up
+
       - name: migration down
-        run: ./migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
+        run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
