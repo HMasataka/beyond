@@ -1,0 +1,4 @@
+templates:
+  dot:
+    schema: 'tools/tbls/templates/schema.dot.tmpl'
+    table: 'tools/tbls/templates/table.dot.tmpl'
