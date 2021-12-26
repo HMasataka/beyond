@@ -4,8 +4,9 @@
 
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
-| [Card](Card.md) | 2 |  | BASE TABLE |
-| [Users](Users.md) | 2 |  | BASE TABLE |
+| [Pet](Pet.md) | 2 |  | BASE TABLE |
+| [User](User.md) | 2 |  | BASE TABLE |
+| [schema_migrations](schema_migrations.md) | 2 |  | BASE TABLE |
 
 ## Relations
 
