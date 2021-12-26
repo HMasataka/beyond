@@ -44,3 +44,12 @@ jobs:
 
       - name: migration down
         run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
+
+      - name: Count changes
+        run: |
+          git add -N .
+          echo "::set-output name=count::$(git diff --name-only | wc -l)"
+
+      - name: echo count
+        if: steps.changes.outputs.count > 0
+        run: echo "The count = ${{ steps.random-color-generator.outputs.count }}"
