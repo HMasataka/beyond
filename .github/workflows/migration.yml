@@ -51,6 +51,10 @@ jobs:
         run: migrate -path ddl -database mysql://user:password@tcp\(localhost:3306\)/db down -all
 
       - name: Count changes
+        run: |
+          echo "$(git status)"
+
+      - name: Count changes
         id: changes
         run: |
           git add -N .
