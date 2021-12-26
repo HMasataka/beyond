@@ -53,6 +53,8 @@ jobs:
           git add -N .
           echo "::set-output name=count::$(git diff --name-only | wc -l)"
 
-      - name: echo count
+      - name: error if changes by tbls does not 0
         if: steps.changes.outputs.count > 0
-        run: echo "The count = ${{ steps.changes.outputs.count }}"
+        run: |
+          echo "::error::Please Update database document by tbls"
+          exit 1
