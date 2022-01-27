@@ -26,8 +26,8 @@ func (p *connectionProvider) CurrentConnection(_ context.Context) Conn {
 type ShardKeyProvider func(ctx context.Context) string
 
 type ShardConnectionProvider struct {
-	db               []*sql.DB
 	shardKeyProvider ShardKeyProvider
+	db               []*sql.DB
 	maxSlot          uint32
 }
 

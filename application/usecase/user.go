@@ -19,9 +19,9 @@ type userUseCase struct {
 	userRepository repository.UserRepository
 }
 
-func NewUserUseCase(transactor transactor.Transactor, userRepository repository.UserRepository) UserUseCase {
+func NewUserUseCase(tx transactor.Transactor, userRepository repository.UserRepository) UserUseCase {
 	return &userUseCase{
-		transactor:     transactor,
+		transactor:     tx,
 		userRepository: userRepository,
 	}
 }

@@ -1,9 +1,9 @@
 package transactor
 
 type Config struct {
+	VendorOption interface{}
 	ReadOnly     bool
 	RollbackOnly bool
-	VendorOption interface{}
 }
 
 func NewDefaultConfig() Config {
