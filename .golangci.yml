@@ -1,5 +1,6 @@
 run:
   skip-files:
+    - transactor/transaction.go
     - test\.go
 
 linters-settings:
@@ -36,7 +37,7 @@ linters-settings:
       - name: cognitive-complexity
         severity: warning
         disabled: false
-        arguments: [12]
+        arguments: [7]
       - name: confusing-naming
         severity: warning
         disabled: false
