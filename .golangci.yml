@@ -1,4 +1,3 @@
-# https://golangci-lint.run/usage/linters
 run:
   skip-files:
     - test\.go
@@ -15,10 +14,18 @@ linters-settings:
   forbidigo:
     forbid:
       - 'fmt\.Print.*'
+  tagliatelle:
+    case:
+      rules:
+        # support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+        json: snake
+        yaml: camel
+        xml: camel
 
 linters:
   disable-all: true
   enable:
+    - revive
     - govet
     - errcheck
     - staticcheck
@@ -26,6 +33,7 @@ linters:
     - structcheck
     - varcheck
     - ineffassign
+    - unused
     - deadcode
     - typecheck
     - stylecheck
@@ -37,9 +45,13 @@ linters:
     - wastedassign
     - prealloc
     - unconvert
+    - wsl
+    - nilerr
+    - predeclared
     - nestif
     - nilnil
     - bodyclose
+    - dupl
     - contextcheck
     - durationcheck
     - errorlint
@@ -48,10 +60,7 @@ linters:
     - forcetypeassert
     - funlen
     - goconst
-    - makezero
-    - nilerr
-    - predeclared
+    - ifshort
     - tagliatelle
     - thelper
     - whitespace
-    - wsl
