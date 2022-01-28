@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 
-	"github.com/caravan-inc/fankey-server/domain/model"
-	"github.com/caravan-inc/fankey-server/domain/model/inventory"
-	"github.com/caravan-inc/fankey-server/domain/repository"
-	"github.com/caravan-inc/fankey-server/transactor"
+	"github.com/HMasataka/beyond/domain/model"
+	"github.com/HMasataka/beyond/domain/model/inventory"
+	"github.com/HMasataka/beyond/domain/repository"
+	"github.com/HMasataka/beyond/transactor"
 )
 
 type UserUseCase interface {

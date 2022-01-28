@@ -1,6 +1,6 @@
 package inventory
 
-import "github.com/caravan-inc/fankey-server/domain/model"
+import "github.com/HMasataka/beyond/domain/model"
 
 type User struct {
 	ID   string `json:"id"`

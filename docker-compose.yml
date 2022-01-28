@@ -14,7 +14,7 @@ services:
               oapi-codegen \
                 -generate spec \
                 -package api \
-                -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params,./payload.yaml:github.com/caravan-inc/fankey-server/application/api/payload \
+                -import-mapping=./param.yaml:github.com/HMasataka/beyond/application/api/params,./payload.yaml:github.com/HMasataka/beyond/application/api/payload \
                 openapi.yaml \
                 > application/api/spec.types.gen.go && \
               oapi-codegen \
@@ -22,7 +22,7 @@ services:
                 -generate chi-server,types \
                 -package pet \
                 -include-tags=pet \
-                -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params,./payload.yaml:github.com/caravan-inc/fankey-server/application/api/payload \
+                -import-mapping=./param.yaml:github.com/HMasataka/beyond/application/api/params,./payload.yaml:github.com/HMasataka/beyond/application/api/payload \
                 openapi.yaml \
                 > application/api/pet/pet.server.gen.go && \
               oapi-codegen \
@@ -30,7 +30,7 @@ services:
                 -generate chi-server,types \
                 -package user \
                 -include-tags=user \
-                -import-mapping=./param.yaml:github.com/caravan-inc/fankey-server/application/api/params,./payload.yaml:github.com/caravan-inc/fankey-server/application/api/payload \
+                -import-mapping=./param.yaml:github.com/HMasataka/beyond/application/api/params,./payload.yaml:github.com/HMasataka/beyond/application/api/payload \
                 openapi.yaml \
                 > application/api/user/user.server.gen.go'
 

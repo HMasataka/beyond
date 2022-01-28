@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 
-	"github.com/caravan-inc/fankey-server/domain/model"
-	"github.com/caravan-inc/fankey-server/domain/repository"
-	"github.com/caravan-inc/fankey-server/transactor"
+	"github.com/HMasataka/beyond/domain/model"
+	"github.com/HMasataka/beyond/domain/repository"
+	"github.com/HMasataka/beyond/transactor"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 

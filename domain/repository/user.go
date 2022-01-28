@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/caravan-inc/fankey-server/domain/model"
+	"github.com/HMasataka/beyond/domain/model"
 )
 
 type UserRepository interface {

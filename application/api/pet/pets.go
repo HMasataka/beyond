@@ -3,7 +3,7 @@ package pet
 import (
 	"net/http"
 
-	"github.com/caravan-inc/fankey-server/application/api/payload"
+	"github.com/HMasataka/beyond/application/api/payload"
 )
 
 func NewPet() *Pet {

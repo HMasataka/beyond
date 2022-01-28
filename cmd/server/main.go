@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/caravan-inc/fankey-server/application/api"
-	"github.com/caravan-inc/fankey-server/application/api/pet"
-	"github.com/caravan-inc/fankey-server/application/api/user"
+	"github.com/HMasataka/beyond/application/api"
+	"github.com/HMasataka/beyond/application/api/pet"
+	"github.com/HMasataka/beyond/application/api/user"
 	middleware2 "github.com/deepmap/oapi-codegen/pkg/chi-middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

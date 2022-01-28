@@ -1,4 +1,4 @@
-module github.com/caravan-inc/fankey-server
+module github.com/HMasataka/beyond
 
 go 1.16
 
