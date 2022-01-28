@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
-	externalRef1 "github.com/caravan-inc/fankey-server/application/api/payload"
+	externalRef1 "github.com/HMasataka/beyond/application/api/payload"
 	"github.com/go-chi/chi/v5"
 )
 

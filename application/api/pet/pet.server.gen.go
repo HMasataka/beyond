@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"net/http"
 
-	externalRef0 "github.com/caravan-inc/fankey-server/application/api/params"
-	externalRef1 "github.com/caravan-inc/fankey-server/application/api/payload"
+	externalRef0 "github.com/HMasataka/beyond/application/api/params"
+	externalRef1 "github.com/HMasataka/beyond/application/api/payload"
 	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/go-chi/chi/v5"
 )

@@ -12,8 +12,8 @@ import (
 	"path"
 	"strings"
 
-	externalRef0 "github.com/caravan-inc/fankey-server/application/api/params"
-	externalRef1 "github.com/caravan-inc/fankey-server/application/api/payload"
+	externalRef0 "github.com/HMasataka/beyond/application/api/params"
+	externalRef1 "github.com/HMasataka/beyond/application/api/payload"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
