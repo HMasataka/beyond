@@ -1,3 +1,3 @@
 [submodule "oapi-generator"]
 	path = oapi-generator
-	url = git@github.com:caravan-inc/fankey-api-generator.git
+	url = git@github.com:HMasataka/oapi-generator.git
