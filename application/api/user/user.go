@@ -6,7 +6,7 @@ import (
 	"github.com/HMasataka/beyond/application/api/payload"
 )
 
-func NewUser() *User {
+func NewUser() ServerInterface {
 	return &User{}
 }
 

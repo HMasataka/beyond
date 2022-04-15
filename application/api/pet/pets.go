@@ -6,7 +6,7 @@ import (
 	"github.com/HMasataka/beyond/application/api/payload"
 )
 
-func NewPet() *Pet {
+func NewPet() ServerInterface {
 	return &Pet{}
 }
 
