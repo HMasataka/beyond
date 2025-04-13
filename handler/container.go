@@ -7,7 +7,9 @@ import (
 )
 
 type HandlerContainer struct {
-	HealthHandler
+	IAccountHandler
+	IHealthHandler
+	IUserHandler
 }
 
 var (
@@ -25,6 +27,8 @@ func NewHandlerOnce(usecaseContainer *usecase.UseCaseContainer) *HandlerContaine
 
 func newContainer(usecaseContainer *usecase.UseCaseContainer) *HandlerContainer {
 	return &HandlerContainer{
-		HealthHandler: NewHealthHandler(),
+		IAccountHandler: NewAccountHandler(usecaseContainer),
+		IHealthHandler:  NewHealthHandler(),
+		IUserHandler:    NewUserHandler(usecaseContainer),
 	}
 }

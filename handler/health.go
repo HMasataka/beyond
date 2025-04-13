@@ -6,13 +6,13 @@ import (
 	"github.com/HMasataka/beyond/handler/payload"
 )
 
-type HealthHandler interface {
+type IHealthHandler interface {
 	Healthz(w http.ResponseWriter, r *http.Request) error
 }
 
 type Health struct{}
 
-func NewHealthHandler() HealthHandler {
+func NewHealthHandler() IHealthHandler {
 	return &Health{}
 }
 

@@ -8,7 +8,8 @@ import (
 )
 
 type UseCaseContainer struct {
-	UserUseCase UserUseCase
+	AccountUseCase AccountUseCase
+	UserUseCase    UserUseCase
 }
 
 var (
@@ -26,6 +27,7 @@ func NewUseCaseOnce(tx transactor.Transactor, driverContainer *driver.DriverCont
 
 func newContainer(tx transactor.Transactor, driverContainer *driver.DriverContainer) *UseCaseContainer {
 	return &UseCaseContainer{
-		UserUseCase: NewUserUseCase(tx, driverContainer),
+		AccountUseCase: NewAccountUseCase(tx, driverContainer),
+		UserUseCase:    NewUserUseCase(tx, driverContainer),
 	}
 }
