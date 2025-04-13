@@ -117,6 +117,20 @@ services:
     networks:
       - default-network
 
+  faker:
+    build:
+      context: tools/faker
+      dockerfile: Dockerfile
+    working_dir: /worker
+    volumes:
+      - .:/worker
+    environment:
+      DATA_BASE_CONFIG_FILE: /worker/tools/faker/db.toml
+      TABLES_DIRECTORY: /worker/tools/faker/tables
+    command: ["faker"]
+    networks:
+      - default-network
+
 networks:
   default-network:
     driver: bridge

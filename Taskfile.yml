@@ -24,3 +24,9 @@ tasks:
       - docker compose run sqlboiler
     desc: Generate entity
     silent: true
+
+  faker:
+    cmds:
+      - docker compose run faker
+    desc: Generate fake data
+    silent: true
