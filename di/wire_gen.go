@@ -7,8 +7,8 @@
 package di
 
 import (
-	"github.com/caravan-inc/oshi-card-card-recommender/config"
-	"github.com/caravan-inc/oshi-card-card-recommender/handler"
+	"github.com/HMasataka/beyond/config"
+	"github.com/HMasataka/beyond/handler"
 )
 
 // Injectors from server.wire.go:

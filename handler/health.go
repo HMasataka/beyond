@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/caravan-inc/oshi-card-card-recommender/handler/payload"
+	"github.com/HMasataka/beyond/handler/payload"
 )
 
 type HealthHandler interface {

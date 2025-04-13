@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	ctxutil "github.com/caravan-inc/oshi-card-card-recommender/context"
+	ctxutil "github.com/HMasataka/beyond/context"
 )
 
 func WithCurrentTime(next http.Handler) http.Handler {
