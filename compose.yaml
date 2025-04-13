@@ -1,47 +1,78 @@
 version: "3.9"
 
 services:
-  pubsub:
-    image: google/cloud-sdk:latest
-    command:
-      [
-        "gcloud",
-        "beta",
-        "emulators",
-        "pubsub",
-        "start",
-        "--host-port=0.0.0.0:8085",
-        "--project=local-project",
-      ]
+  server:
+    build:
+      context: .
+      dockerfile: tools/air/Dockerfile
+    environment:
+      MYSQL_HOST: mysql
+      STORAGE_EMULATOR_HOST: cloud-storage:4443
+      FIREBASE_AUTH_EMULATOR_HOST: firebase:9099
+      GCLOUD_PROJECT: beyond
+    volumes:
+      - ./:/app
     ports:
-      - "8085:8085"
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-f",
-          "http://localhost:8085/v1/projects/local-project/schemas",
-        ]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    platform: linux/amd64
+      - 8080:8080
     networks:
       - default-network
 
-  topic:
-    build:
-      context: .
-      dockerfile: tools/topic/Dockerfile
-    working_dir: /worker
+  mysql:
+    image: mysql:9.1.0
+    ports:
+      - "3306:3306"
+    platform: linux/amd64
     environment:
-      PROJECT_ID: local-project
-      TOPIC_ID: local-topic
-      PUBSUB_EMULATOR_HOST: pubsub:8085
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    command:
+      - --log-bin-trust-function-creators=1
+    restart: always
     networks:
       - default-network
+
+  migrate:
+    image: arigaio/atlas:0.30.0
+    command: >
+      schema apply --env docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - default-network
+    volumes:
+      - ./db/atlas.hcl:/atlas.hcl
+      - ./db/schema.hcl:/schema.hcl
+
+  sqlboiler:
+    build:
+      context: tools/sqlboiler
+      dockerfile: Dockerfile
+    working_dir: /worker
+    volumes:
+      - ./tools/sqlboiler/sqlboiler.toml:/worker/sqlboiler.toml
+      - ./domain/entity:/worker/domain/entity
+      - ./tools/sqlboiler/templates:/worker/sqlboiler/templates
+      - ./go.mod:/worker/go.mod
+    networks:
+      - default-network
+    command: mysql
+
+  tbls:
+    image: ghcr.io/k1low/tbls:v1.80.0
+    working_dir: /worker
+    volumes:
+      - ./doc:/doc
+      - ./tools/tbls:/worker
+    networks:
+      - default-network
+    command: doc mysql://user:password@mysql:3306/db /doc/database --rm-dist
 
   wire:
     build:
@@ -51,6 +82,40 @@ services:
     volumes:
       - .:/worker
     command: ["/worker/tools/wire/entrypoint.sh"]
+
+  cloud-storage:
+    image: fsouza/fake-gcs-server
+    restart: always
+    tty: true
+    volumes:
+      - ./_example/data/:/data
+      - ./.storage:/storage
+    ports:
+      - "4443:4443"
+    command: -scheme http -port 4443 -public-host cloud-storage
+    networks:
+      - default-network
+
+  firebase:
+    build:
+      context: tools/firebase
+      dockerfile: Dockerfile
+    ports:
+      - "9099:9099"
+      - "4000:4000"
+    volumes:
+      - ./tools/firebase/firebase.json:/opt/firebase/firebase.json
+    command:
+      [
+        "firebase",
+        "emulators:start",
+        "--project",
+        "beyond",
+        "--only",
+        "auth,ui",
+      ]
+    networks:
+      - default-network
 
 networks:
   default-network:

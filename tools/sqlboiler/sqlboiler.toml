@@ -1,0 +1,19 @@
+output   = "domain/entity"
+pkgname = "entity"
+templates = [
+    "sqlboiler/templates/main",
+    "sqlboiler/templates/test",
+    "sqlboiler/templates/custom"
+]
+
+[auto-columns]
+  created = "created_at"
+  updated = "updated_at"
+
+[mysql]
+  dbname  = "db"
+  host    = "mysql"
+  port    = 3306
+  user    = "user"
+  pass    = "password"
+  sslmode = "false"
