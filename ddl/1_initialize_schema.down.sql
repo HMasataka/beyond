@@ -1,2 +1,0 @@
-DROP TABLE Pet;
-DROP TABLE User;

@@ -1,6 +1,6 @@
 module github.com/HMasataka/beyond
 
-go 1.16
+go 1.24
 
 require (
 	github.com/deepmap/oapi-codegen v1.9.0

@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  pubsub:
+    image: google/cloud-sdk:latest
+    command:
+      [
+        "gcloud",
+        "beta",
+        "emulators",
+        "pubsub",
+        "start",
+        "--host-port=0.0.0.0:8085",
+        "--project=local-project",
+      ]
+    ports:
+      - "8085:8085"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8085/v1/projects/local-project/schemas",
+        ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    platform: linux/amd64
+    networks:
+      - default-network
+
+  topic:
+    build:
+      context: .
+      dockerfile: tools/topic/Dockerfile
+    working_dir: /worker
+    environment:
+      PROJECT_ID: local-project
+      TOPIC_ID: local-topic
+      PUBSUB_EMULATOR_HOST: pubsub:8085
+    networks:
+      - default-network
+
+  wire:
+    build:
+      context: tools/wire
+      dockerfile: Dockerfile
+    working_dir: /worker
+    volumes:
+      - .:/worker
+    command: ["/worker/tools/wire/entrypoint.sh"]
+
+networks:
+  default-network:
+    driver: bridge

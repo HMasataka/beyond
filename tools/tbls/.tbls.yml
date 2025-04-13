@@ -1,4 +1,0 @@
-templates:
-  dot:
-    schema: 'templates/schema.dot.tmpl'
-    table: 'templates/table.dot.tmpl'

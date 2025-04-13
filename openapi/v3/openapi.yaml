@@ -1,0 +1,44 @@
+openapi: 3.0.1
+info:
+  contact: {}
+  description: oshi card recommendation api
+  title: Oshi Card Recommendation API
+  version: "1.0"
+servers:
+- url: //localhost:8081/
+paths:
+  /healthz:
+    get:
+      description: ヘルスチェック
+      operationId: Healthz
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payload.GetHealthResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payload.Error'
+          description: Bad Request
+      summary: Healthz
+      tags:
+      - health
+components:
+  schemas:
+    payload.Error:
+      example:
+        code: 0
+        message: message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
+    payload.GetHealthResponse:
+      type: object
+x-original-swagger-version: "2.0"
