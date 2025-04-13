@@ -7,20 +7,14 @@ tasks:
     desc: List all tasks
     cmd: task -l
 
-  pubsub:
-    cmds:
-      - docker compose up -d pubsub
-    desc: Up the pub-sub emulator
-    silent: true
-
-  topic:
-    cmds:
-      - docker compose run topic
-    desc: Create pub-sub topic
-    silent: true
-
   di:
     cmds:
       - docker compose run wire
     desc: Generate dependency injection
+    silent: true
+
+  migrate:
+    cmds:
+      - docker compose run migrate
+    desc: Run migration
     silent: true

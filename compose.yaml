@@ -24,7 +24,7 @@ services:
     platform: linux/amd64
     environment:
       MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_DATABASE: db
+      MYSQL_DATABASE: beyond-db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     healthcheck:
@@ -72,7 +72,7 @@ services:
       - ./tools/tbls:/worker
     networks:
       - default-network
-    command: doc mysql://user:password@mysql:3306/db /doc/database --rm-dist
+    command: doc mysql://user:password@mysql:3306/beyond-db /doc/database --rm-dist
 
   wire:
     build:
