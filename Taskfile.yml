@@ -18,3 +18,9 @@ tasks:
       - docker compose run migrate
     desc: Run migration
     silent: true
+
+  gen-entity:
+    cmds:
+      - docker compose run sqlboiler
+    desc: Generate entity
+    silent: true
