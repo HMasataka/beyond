@@ -7,6 +7,18 @@ tasks:
     desc: List all tasks
     cmd: task -l
 
+  server:
+    cmds:
+      - docker compose up -d server
+    desc: Start server
+    silent: true
+
+  firebase:
+    cmds:
+      - docker compose up -d firebase
+    desc: Start firebase
+    silent: true
+
   di:
     cmds:
       - docker compose run wire
@@ -29,4 +41,10 @@ tasks:
     cmds:
       - docker compose run faker
     desc: Generate fake data
+    silent: true
+
+  local-user:
+    cmds:
+      - sh ./tools/firebase/create-local-user.sh
+    desc: Create local user
     silent: true

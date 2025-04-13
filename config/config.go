@@ -4,7 +4,7 @@ import "github.com/caarlos0/env/v9"
 
 type Config struct {
 	Environment    string   `env:"ENVIRONMENT" envDefault:"dev"`
-	Port           string   `env:"PORT" envDefault:"8081"`
+	Port           string   `env:"PORT" envDefault:"8080"`
 	AllowedOrigins []string `env:"ALLOW_ORIGINS" envSeparator:"," envDefault:"*"`
 	GoogleCloud    GoogleCloud
 	Firebase       Firebase

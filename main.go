@@ -19,7 +19,7 @@ import (
 // @title Oshi Card Recommendation API
 // @version 1.0
 // @description oshi card recommendation api
-// @host localhost:8081
+// @host localhost:8080
 func main() {
 	ctx := context.Background()
 

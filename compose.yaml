@@ -10,6 +10,10 @@ services:
       STORAGE_EMULATOR_HOST: cloud-storage:4443
       FIREBASE_AUTH_EMULATOR_HOST: firebase:9099
       GCLOUD_PROJECT: beyond
+      MYSQL_DB: beyond-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      PORT: 8080
     volumes:
       - ./:/app
     ports:
