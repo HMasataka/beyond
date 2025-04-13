@@ -10,7 +10,7 @@ import (
 	"github.com/HMasataka/beyond/config"
 	"github.com/HMasataka/beyond/di"
 	"github.com/HMasataka/beyond/middleware"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httplog/v2"
 	"golang.org/x/exp/slog"

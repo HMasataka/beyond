@@ -8,7 +8,6 @@ require (
 	github.com/HMasataka/transactor v0.0.0-20230806042857-d9f08aaf8d62
 	github.com/caarlos0/env/v9 v9.0.0
 	github.com/friendsofgo/errors v0.9.2
-	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/httplog/v2 v2.1.1
