@@ -22,6 +22,7 @@ func NewDriverOnce(clientProvider rdbms.ClientProvider) *dd.DriverContainer {
 
 func newDriver(clientProvider rdbms.ClientProvider) *dd.DriverContainer {
 	return &dd.DriverContainer{
-		UserDriver: NewUserDriver(clientProvider),
+		AccountDriver: NewAccountDriver(clientProvider),
+		UserDriver:    NewUserDriver(clientProvider),
 	}
 }

@@ -1,3 +1,26 @@
+table "account" {
+  schema = schema.beyond-db
+
+  column "user_id" {
+    null = false
+    type = varchar(36)
+  }
+
+  column "firebase_id" {
+    null = false
+    type = varchar(36)
+  }
+
+  column "created_at" {
+    type = datetime
+    null = false
+  }
+
+  primary_key {
+    columns = [column.user_id]
+  }
+}
+
 table "user" {
   schema = schema.beyond-db
 
@@ -23,6 +46,11 @@ table "user" {
 
   primary_key {
     columns = [column.id]
+  }
+
+  foreign_key "account_user_fk" {
+    columns     = [column.id]
+    ref_columns = [table.account.column.user_id]
   }
 }
 
