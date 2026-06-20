@@ -1,0 +1,36 @@
+name: Template cleanup
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    # テンプレート元のリポジトリ自身では実行しない。
+    if: github.repository != 'HMasataka/beyond'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: テンプレート初期化を実行
+        run: bash .github/template-cleanup/run.sh
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+
+      - name: コミットしてプッシュ
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "初期化対象がありません。"
+            exit 0
+          fi
+          git commit -m "chore: initialize project from template"
+          git push origin HEAD:${{ github.ref_name }}
