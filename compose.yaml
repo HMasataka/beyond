@@ -3,9 +3,9 @@ services:
     image: mysql:8.4
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: app
+      MYSQL_USER: beyond
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: app
+      MYSQL_DATABASE: beyond-db
     ports:
       - "3306:3306"
     volumes:
