@@ -35,6 +35,18 @@ tasks:
       - go vet ./...
       - golangci-lint run ./...
 
+  dev:web:
+    desc: Run Vite dev server
+    dir: "{{.WEB_DIR}}"
+    cmds:
+      - pnpm dev
+
+  build:web:
+    desc: Build web production bundle
+    dir: "{{.WEB_DIR}}"
+    cmds:
+      - pnpm build
+
   compose:up:
     desc: Start containers
     cmds:
