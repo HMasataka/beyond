@@ -20,6 +20,7 @@
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
           packages = [
+            pkgs.go
             pkgs.go-task
             pkgs.golangci-lint
             pkgs.biome
