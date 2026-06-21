@@ -22,6 +22,7 @@
           packages = [
             pkgs.go-task
             pkgs.golangci-lint
+            pkgs.biome
           ];
         };
       });

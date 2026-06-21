@@ -29,11 +29,23 @@ tasks:
       - pnpm gen:api
 
   lint:
+    desc: Run all linters (Go + web)
+    cmds:
+      - task: lint:api
+      - task: lint:web
+
+  lint:api:
     desc: Run Go linters
     dir: "{{.API_DIR}}"
     cmds:
       - go vet ./...
       - golangci-lint run ./...
+
+  lint:web:
+    desc: Lint and format-check web with Biome
+    dir: "{{.WEB_DIR}}"
+    cmds:
+      - biome check .
 
   dev:web:
     desc: Run Vite dev server
