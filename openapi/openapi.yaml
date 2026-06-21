@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: Beyond API
+  version: 0.1.0
+paths:
+  /healthz:
+    get:
+      summary: ヘルスチェック
+      operationId: getHealthz
+      responses:
+        "200":
+          description: サービスは正常
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+          example: ok

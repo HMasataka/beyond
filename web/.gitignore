@@ -1,0 +1,9 @@
+node_modules/
+
+# ビルド成果物
+dist/
+build/
+
+# ログ・キャッシュ
+*.log
+.cache/
