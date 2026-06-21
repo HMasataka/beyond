@@ -7,7 +7,9 @@ export default function App() {
     <main>
       <h1>beyond web</h1>
       <p>React + TypeScript + Vite の最小サンプル。</p>
-      <button onClick={() => setCount((c) => c + 1)}>count is {count}</button>
+      <button type="button" onClick={() => setCount((c) => c + 1)}>
+        count is {count}
+      </button>
     </main>
   );
 }
