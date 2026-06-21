@@ -28,6 +28,13 @@ tasks:
     cmds:
       - pnpm gen:api
 
+  lint:
+    desc: Run Go linters
+    dir: "{{.API_DIR}}"
+    cmds:
+      - go vet ./...
+      - golangci-lint run ./...
+
   compose:up:
     desc: Start containers
     cmds:

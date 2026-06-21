@@ -21,6 +21,7 @@
         default = pkgs.mkShell {
           packages = [
             pkgs.go-task
+            pkgs.golangci-lint
           ];
         };
       });
