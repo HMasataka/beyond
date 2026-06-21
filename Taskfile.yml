@@ -1,0 +1,50 @@
+version: "3"
+
+vars:
+  API_DIR: api
+  WEB_DIR: web
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list-all
+
+  gen:
+    desc: Generate code from OpenAPI spec (Go + TS)
+    cmds:
+      - task: gen:api
+      - task: gen:web
+
+  gen:api:
+    desc: Generate Go types and chi server from OpenAPI
+    dir: "{{.API_DIR}}"
+    cmds:
+      - go generate ./...
+
+  gen:web:
+    desc: Generate TypeScript types from OpenAPI
+    dir: "{{.WEB_DIR}}"
+    cmds:
+      - pnpm gen:api
+
+  compose:up:
+    desc: Start containers
+    cmds:
+      - docker compose up -d
+      - docker compose ps
+
+  compose:down:
+    desc: Stop and remove containers (preserve volumes)
+    cmds:
+      - docker compose down
+
+  compose:reset:
+    desc: Stop containers and delete volumes
+    cmds:
+      - docker compose down -v
+
+  compose:logs:
+    desc: Tail compose logs
+    cmds:
+      - docker compose logs -f
