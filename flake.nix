@@ -23,6 +23,7 @@
             pkgs.go
             pkgs.go-task
             pkgs.golangci-lint
+            pkgs.air
             pkgs.biome
           ];
         };
