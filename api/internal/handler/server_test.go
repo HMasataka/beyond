@@ -10,9 +10,9 @@ import (
 	"github.com/HMasataka/beyond/internal/openapi"
 )
 
-func TestGetHealthz(t *testing.T) {
-	// 生成されたルータ経由で実際の配線ごと検証する。
-	ts := httptest.NewServer(openapi.Handler(openapi.NewStrictHandler(handler.New(), nil)))
+func TestServerHealthz(t *testing.T) {
+	// 集約した Server が生成インターフェースを満たし、ルータ経由で応答することを検証する。
+	ts := httptest.NewServer(openapi.Handler(openapi.NewStrictHandler(handler.NewServer(), nil)))
 	defer ts.Close()
 
 	res, err := http.Get(ts.URL + "/healthz")
