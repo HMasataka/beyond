@@ -47,6 +47,18 @@ tasks:
     cmds:
       - biome check .
 
+  dev:api:
+    desc: Run the API server
+    dir: "{{.API_DIR}}"
+    cmds:
+      - go run ./cmd/main
+
+  build:api:
+    desc: Build the API binary
+    dir: "{{.API_DIR}}"
+    cmds:
+      - go build -o bin/api ./cmd/main
+
   dev:web:
     desc: Run Vite dev server
     dir: "{{.WEB_DIR}}"

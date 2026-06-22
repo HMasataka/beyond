@@ -1,2 +1,5 @@
 # direnv
 .direnv/
+
+# Go build artifacts
+api/bin/
