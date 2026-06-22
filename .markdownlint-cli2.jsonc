@@ -1,0 +1,8 @@
+{
+  // .gitignore を尊重し、node_modules や生成物を対象から外す。
+  "gitignore": true,
+  "config": {
+    // 1 行の文字数制限。日本語の散文では折り返しを強制したくないため無効化する。
+    "MD013": false
+  }
+}
