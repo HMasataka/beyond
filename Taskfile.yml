@@ -47,6 +47,24 @@ tasks:
     cmds:
       - biome check .
 
+  test:
+    desc: Run all tests (Go + web)
+    cmds:
+      - task: test:api
+      - task: test:web
+
+  test:api:
+    desc: Run Go tests
+    dir: "{{.API_DIR}}"
+    cmds:
+      - go test ./...
+
+  test:web:
+    desc: Run web tests
+    dir: "{{.WEB_DIR}}"
+    cmds:
+      - pnpm test
+
   dev:
     desc: Run API and web dev servers concurrently
     deps:

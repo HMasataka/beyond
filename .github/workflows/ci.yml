@@ -16,3 +16,18 @@ jobs:
       # Go と web の lint をまとめて実行する。ツールは flake の devShell から供給する。
       - name: Lint (Go + web)
         run: nix develop --command task lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+
+      # web テストは node_modules を要するため lockfile 固定でインストールする。
+      - name: Install web deps
+        run: nix develop --command pnpm --dir web install --frozen-lockfile
+
+      # Go と web のテストをまとめて実行する。ツールは flake の devShell から供給する。
+      - name: Test (Go + web)
+        run: nix develop --command task test

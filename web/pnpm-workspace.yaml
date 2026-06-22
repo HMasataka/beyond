@@ -1,0 +1,4 @@
+# esbuild はネイティブバイナリのビルドに postinstall スクリプトを要する。
+# pnpm はセキュリティ上ビルドスクリプトを既定でブロックするため、明示的に許可する。
+allowBuilds:
+  esbuild: true
