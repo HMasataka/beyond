@@ -47,11 +47,17 @@ tasks:
     cmds:
       - biome check .
 
+  dev:
+    desc: Run API and web dev servers concurrently
+    deps:
+      - dev:api
+      - dev:web
+
   dev:api:
-    desc: Run the API server
+    desc: Run the API server with live reload
     dir: "{{.API_DIR}}"
     cmds:
-      - go run ./cmd/main
+      - air
 
   build:api:
     desc: Build the API binary

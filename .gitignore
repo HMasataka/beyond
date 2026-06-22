@@ -3,3 +3,6 @@
 
 # Go build artifacts
 api/bin/
+
+# Air live-reload build output
+api/tmp/
