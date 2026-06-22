@@ -36,7 +36,7 @@ func run(logger *slog.Logger) error {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Recoverer)
 
-	openapi.HandlerFromMux(openapi.NewStrictHandler(handler.New(), nil), r)
+	openapi.HandlerFromMux(openapi.NewStrictHandler(handler.NewServer(), nil), r)
 
 	srv := &http.Server{
 		Addr:              addr,
