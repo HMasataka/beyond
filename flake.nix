@@ -27,6 +27,7 @@
             pkgs.nodejs_24
             pkgs.pnpm
             pkgs.biome
+            pkgs.rustywind
             pkgs.markdownlint-cli2
           ];
         };

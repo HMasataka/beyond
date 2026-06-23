@@ -7,3 +7,7 @@ build/
 # ログ・キャッシュ
 *.log
 .cache/
+
+# ローカル専用の環境変数（.env.development / .env.example は追跡する）
+.env.local
+.env.*.local

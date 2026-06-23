@@ -48,10 +48,11 @@ tasks:
       - golangci-lint run ./...
 
   lint:web:
-    desc: Lint and format-check web with Biome
+    desc: Lint and format-check web with Biome and rustywind
     dir: "{{.WEB_DIR}}"
     cmds:
       - biome check .
+      - rustywind --check-formatted src
 
   test:
     desc: Run all tests (Go + web)
