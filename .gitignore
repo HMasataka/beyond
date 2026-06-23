@@ -6,3 +6,6 @@ api/bin/
 
 # Air live-reload build output
 api/tmp/
+
+# belt ワークフローの一時生成物
+.belt/

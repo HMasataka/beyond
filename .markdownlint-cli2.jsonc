@@ -1,6 +1,9 @@
 {
   // .gitignore を尊重し、node_modules や生成物を対象から外す。
   "gitignore": true,
+  // .belt はワークフローの一時生成物で git 管理外。gitignore: true では
+  // グローバル除外や .git/info/exclude を読まないため、ここで明示的に外す。
+  "ignores": [".belt"],
   "config": {
     // 1 行の文字数制限。日本語の散文では折り返しを強制したくないため無効化する。
     "MD013": false

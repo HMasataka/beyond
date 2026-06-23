@@ -1,11 +1,5 @@
-:root {
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-}
+@import "tailwindcss";
 
-body {
-  margin: 0;
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
+@theme {
+  --color-brand: oklch(0.62 0.19 250);
 }

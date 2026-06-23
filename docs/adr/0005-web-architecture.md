@@ -39,6 +39,7 @@ web/src/
 ```
 
 各コンポーネントはフォルダ単位で持ち、`<Component>.tsx`・`<Component>.test.tsx`・re-export だけの `index.ts` を置く。
+ページは `pages/<page>/index.tsx` をルート要素のエントリとして直接使い、バレルは置かない。
 `<page>`・`<Component>` は対象ごとの名前を入れるプレースホルダ。
 
 ### 依存のルール
