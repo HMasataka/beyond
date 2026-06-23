@@ -13,7 +13,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/HMasataka/beyond/internal/handler"
+	"github.com/HMasataka/beyond/internal/di"
 	"github.com/HMasataka/beyond/internal/openapi"
 )
 
@@ -32,21 +32,30 @@ func run(logger *slog.Logger) error {
 		addr = ":8080"
 	}
 
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
+	server, cleanup, err := di.New(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if cerr := cleanup(); cerr != nil {
+			logger.Error("cleanup failed", slog.Any("error", cerr))
+		}
+	}()
+
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Recoverer)
 
-	openapi.HandlerFromMux(openapi.NewStrictHandler(handler.NewServer(), nil), r)
+	openapi.HandlerFromMux(openapi.NewStrictHandler(server, nil), r)
 
 	srv := &http.Server{
 		Addr:              addr,
 		Handler:           r,
 		ReadHeaderTimeout: 10 * time.Second,
 	}
-
-	// SIGINT / SIGTERM を受けたら graceful shutdown に入る。
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
 
 	errCh := make(chan error, 1)
 	go func() {

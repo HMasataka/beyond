@@ -17,7 +17,7 @@ func TestGetHealthz(t *testing.T) {
 	if !ok {
 		t.Fatalf("response type = %T, want GetHealthz200JSONResponse", got)
 	}
-	if res.Status != openapi.Ok {
-		t.Errorf("status = %q, want %q", res.Status, openapi.Ok)
+	if res.Status != openapi.HealthStatusStatusOk {
+		t.Errorf("status = %q, want %q", res.Status, openapi.HealthStatusStatusOk)
 	}
 }
