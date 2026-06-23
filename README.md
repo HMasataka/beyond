@@ -17,6 +17,13 @@ Go 製 API と React 製 web を OpenAPI で繋ぐモノレポのプロジェク
 │       ├── migrations/    マイグレーション
 │       └── openapi/       OpenAPI からの生成物（編集しない）
 ├── web/                   React + TypeScript + Vite
+│   └── src/
+│       ├── api/           API クライアント（openapi-fetch + TanStack Query）と生成物 schema.ts
+│       ├── components/    再利用コンポーネント（Atomic Design。atoms/ など）
+│       ├── layouts/       ページ共通の枠（AppLayout）
+│       ├── pages/         ルートごとの画面とデータ取得（pages/<name>/）
+│       ├── router.tsx     React Router のルート定義
+│       └── main.tsx       エントリポイント
 ├── openapi/openapi.yaml   API 仕様。Go と TypeScript の生成の起点
 ├── compose.yaml           実行時に立ち上げるサービス（MySQL）
 ├── flake.nix              開発ツール（Nix で固定）
