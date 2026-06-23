@@ -4,9 +4,13 @@ go 1.26.3
 
 tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
 
-require github.com/go-chi/chi/v5 v5.3.0
+require (
+	github.com/go-chi/chi/v5 v5.3.0
+	github.com/go-sql-driver/mysql v1.10.0
+)
 
 require (
+	filippo.io/edwards25519 v1.2.0 // indirect
 	github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936 // indirect
 	github.com/getkin/kin-openapi v0.135.0 // indirect
 	github.com/go-openapi/jsonpointer v0.22.4 // indirect

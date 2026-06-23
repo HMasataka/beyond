@@ -14,6 +14,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /readyz:
+    get:
+      summary: レディネスチェック
+      operationId: getReadyz
+      responses:
+        "200":
+          description: 依存先（DB）に到達でき、リクエストを受け付けられる
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadinessStatus"
+        "503":
+          description: 依存先（DB）に到達できず、リクエストを受け付けられない
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadinessStatus"
 components:
   schemas:
     HealthStatus:
@@ -25,4 +42,15 @@ components:
           type: string
           enum:
             - ok
+          example: ok
+    ReadinessStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+            - unavailable
           example: ok

@@ -24,6 +24,7 @@
             pkgs.go-task
             pkgs.golangci-lint
             pkgs.air
+            pkgs.goose
             pkgs.nodejs_24
             pkgs.pnpm
             pkgs.biome

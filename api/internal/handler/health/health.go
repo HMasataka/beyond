@@ -16,5 +16,5 @@ func New() *Health {
 
 // GetHealthz はサービスの稼働を示す 200 応答を返す。
 func (h *Health) GetHealthz(_ context.Context, _ openapi.GetHealthzRequestObject) (openapi.GetHealthzResponseObject, error) {
-	return openapi.GetHealthz200JSONResponse{Status: openapi.Ok}, nil
+	return openapi.GetHealthz200JSONResponse{Status: openapi.HealthStatusStatusOk}, nil
 }
