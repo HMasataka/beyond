@@ -3,10 +3,83 @@ version: "2"
 linters:
   default: standard
   enable:
+    - depguard
     - misspell
     - revive
     - unconvert
   settings:
+    # オニオンアーキテクチャ（ADR 0004）の依存方向を強制する。各層から「外向き」の
+    # import を禁じ、内向き一方向だけを許す。di は合成ルートのためルールを置かない。
+    depguard:
+      rules:
+        domain:
+          files:
+            - "**/internal/domain/**"
+          deny:
+            - pkg: "github.com/HMasataka/beyond/internal/usecase"
+              desc: "domain は中心。外側の層に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/repository"
+              desc: "domain は中心。外側の層に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/handler"
+              desc: "domain は中心。外側の層に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/infra"
+              desc: "domain は中心。技術詳細に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/openapi"
+              desc: "domain は中心。生成物に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/di"
+              desc: "domain は合成ルートに依存しない（ADR 0004）"
+        usecase:
+          files:
+            - "**/internal/usecase/**"
+          deny:
+            - pkg: "github.com/HMasataka/beyond/internal/repository"
+              desc: "usecase は domain にのみ依存する（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/handler"
+              desc: "usecase は domain にのみ依存する（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/infra"
+              desc: "usecase は domain にのみ依存する（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/openapi"
+              desc: "usecase は domain にのみ依存する（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/di"
+              desc: "usecase は合成ルートに依存しない（ADR 0004）"
+        handler:
+          files:
+            - "**/internal/handler/**"
+          deny:
+            - pkg: "github.com/HMasataka/beyond/internal/repository"
+              desc: "handler は usecase 経由で業務を呼ぶ。永続化に直接依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/infra"
+              desc: "handler は技術詳細に直接依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/di"
+              desc: "handler は合成ルートに依存しない（ADR 0004）"
+        repository:
+          files:
+            - "**/internal/repository/**"
+          deny:
+            - pkg: "github.com/HMasataka/beyond/internal/usecase"
+              desc: "repository は domain のインターフェースを実装する。上位層に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/handler"
+              desc: "repository は上位層に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/openapi"
+              desc: "repository は生成物に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/di"
+              desc: "repository は合成ルートに依存しない（ADR 0004）"
+        infra:
+          files:
+            - "**/internal/infra/**"
+          deny:
+            - pkg: "github.com/HMasataka/beyond/internal/domain"
+              desc: "infra は技術詳細の葉。業務層を知らない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/usecase"
+              desc: "infra は技術詳細の葉。業務層を知らない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/repository"
+              desc: "infra は技術詳細の葉。業務層を知らない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/handler"
+              desc: "infra は技術詳細の葉。業務層を知らない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/openapi"
+              desc: "infra は生成物に依存しない（ADR 0004）"
+            - pkg: "github.com/HMasataka/beyond/internal/di"
+              desc: "infra は合成ルートに依存しない（ADR 0004）"
     revive:
       # golint 相当のデフォルト規則から package-comments のみ除いた明示列挙。
       # rules を指定するとデフォルトは引き継がれないため、欲しい規則を列挙する。
