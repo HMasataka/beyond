@@ -33,6 +33,7 @@ tasks:
     cmds:
       - task: lint:api
       - task: lint:web
+      - task: lint:arch
       - task: lint:md
 
   lint:md:
@@ -53,6 +54,12 @@ tasks:
     cmds:
       - biome check .
       - rustywind --check-formatted src
+
+  lint:arch:
+    desc: Enforce web import boundaries with dependency-cruiser (needs node_modules)
+    dir: "{{.WEB_DIR}}"
+    cmds:
+      - pnpm depcruise
 
   test:
     desc: Run all tests (Go + web)
