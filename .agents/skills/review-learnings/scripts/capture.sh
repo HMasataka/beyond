@@ -5,6 +5,8 @@ set -eu
 
 slug=""
 pr=""
+origin=""
+id=""
 date=""
 title=""
 rule=""
@@ -15,25 +17,46 @@ die() { printf 'capture: %s\n' "$1" >&2; exit 1; }
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --slug)  slug="$2";  shift 2 ;;
-    --pr)    pr="$2";    shift 2 ;;
-    --date)  date="$2";  shift 2 ;;
-    --title) title="$2"; shift 2 ;;
-    --rule)  rule="$2";  shift 2 ;;
-    --why)   why="$2";   shift 2 ;;
-    --scope) scopes="$scopes $2"; shift 2 ;;
+    --slug)   slug="$2";   shift 2 ;;
+    --pr)     pr="$2";     shift 2 ;;
+    --origin) origin="$2"; shift 2 ;;
+    --id)     id="$2";     shift 2 ;;
+    --date)   date="$2";   shift 2 ;;
+    --title)  title="$2";  shift 2 ;;
+    --rule)   rule="$2";   shift 2 ;;
+    --why)    why="$2";    shift 2 ;;
+    --scope)  scopes="$scopes $2"; shift 2 ;;
     *) die "unknown argument: $1" ;;
   esac
 done
 
+# 既存台帳との後方互換のため --pr を残す（--origin pr の糖衣）。
+if [ -n "$pr" ]; then
+  [ -z "$origin" ] || die "--pr and --origin are mutually exclusive"
+  origin="pr"
+  id="$pr"
+fi
+[ -n "$origin" ] || die "--pr or --origin is required"
+
 [ -n "$slug" ] || die "--slug is required"
-[ -n "$pr" ]   || die "--pr is required"
+[ -n "$id" ]   || die "--pr or --id is required"
 [ -n "$date" ] || die "--date is required"
 [ -n "$scopes" ] || die "--scope is required (use --scope general if truly global)"
 
 printf '%s' "$slug" | grep -Eq '^[a-z0-9]+(-[a-z0-9]+)*$' || die "slug must be kebab-case: $slug"
-printf '%s' "$pr"   | grep -Eq '^[0-9]+$' || die "pr must be a number: $pr"
 printf '%s' "$date" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' || die "date must be YYYY-MM-DD: $date"
+
+case "$origin" in
+  pr)
+    printf '%s' "$id" | grep -Eq '^[0-9]+$' || die "pr must be a number: $id"
+    occ_line="  - { pr: $id, date: $date }"
+    ;;
+  session)
+    printf '%s' "$id" | grep -Eq '^[A-Za-z0-9._-]+$' || die "session id must be safe chars: $id"
+    occ_line="  - { origin: session, id: $id, date: $date }"
+    ;;
+  *) die "origin must be pr or session: $origin" ;;
+esac
 
 # CLI 非依存にルートを解決する。Claude は CLAUDE_PROJECT_DIR、他は git トップレベル。
 root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || true)}"
@@ -42,11 +65,19 @@ ledger_dir="$root/docs/learnings"
 [ -d "$ledger_dir" ] || die "ledger dir not found: $ledger_dir"
 
 file="$ledger_dir/$slug.md"
-occ_line="  - { pr: $pr, date: $date }"
 
 if [ -f "$file" ]; then
-  if grep -Eq "^[[:space:]]*-[[:space:]]*\{[[:space:]]*pr:[[:space:]]*$pr,[[:space:]]*date:[[:space:]]*$date[[:space:]]*\}" "$file"; then
-    printf 'capture: skip duplicate (pr=%s, date=%s) for %s\n' "$pr" "$date" "$slug"
+  dup_re=""
+  case "$origin" in
+    pr)
+      dup_re="^[[:space:]]*-[[:space:]]*\{[[:space:]]*pr:[[:space:]]*$id,[[:space:]]*date:[[:space:]]*$date[[:space:]]*\}"
+      ;;
+    session)
+      dup_re="^[[:space:]]*-[[:space:]]*\{[[:space:]]*origin:[[:space:]]*session,[[:space:]]*id:[[:space:]]*$id,[[:space:]]*date:[[:space:]]*$date[[:space:]]*\}"
+      ;;
+  esac
+  if grep -Eq "$dup_re" "$file"; then
+    printf 'capture: skip duplicate (%s=%s, date=%s) for %s\n' "$origin" "$id" "$date" "$slug"
     exit 0
   fi
   tmp="$file.tmp.$$"
@@ -67,7 +98,7 @@ if [ -f "$file" ]; then
     END { if (in_occ && !done) print occ }
   ' "$file" > "$tmp"
   mv "$tmp" "$file"
-  printf 'capture: appended occurrence (pr=%s, date=%s) to %s\n' "$pr" "$date" "$slug"
+  printf 'capture: appended occurrence (%s=%s, date=%s) to %s\n' "$origin" "$id" "$date" "$slug"
   exit 0
 fi
 

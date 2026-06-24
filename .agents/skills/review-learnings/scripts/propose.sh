@@ -19,7 +19,7 @@ candidates=$(
     esac
     awk '
       function trim(s) { sub(/^[ \t]+/, "", s); sub(/[ \t]+$/, "", s); return s }
-      BEGIN { fm = 0; slug = ""; status = ""; occ = 0; distinct_pr = 0 }
+      BEGIN { fm = 0; slug = ""; status = ""; occ = 0; distinct = 0 }
       /^---[ \t]*$/ {
         fm++
         next
@@ -32,24 +32,26 @@ candidates=$(
       }
       fm == 1 && /^[ \t]*-[ \t]*\{/ {
         line = $0
-        pr = ""; date = ""
-        if (match(line, /pr:[ \t]*[0-9]+/)) {
+        # distinct キーは PR 由来なら "pr:N"、会話由来なら "session:<id>"。
+        key = ""
+        if (match(line, /origin:[ \t]*session/)) {
+          if (match(line, /id:[ \t]*[A-Za-z0-9._-]+/)) {
+            tok = substr(line, RSTART, RLENGTH)
+            sub(/id:[ \t]*/, "", tok); key = "session:" tok
+          }
+        } else if (match(line, /pr:[ \t]*[0-9]+/)) {
           tok = substr(line, RSTART, RLENGTH)
-          sub(/pr:[ \t]*/, "", tok); pr = tok
+          sub(/pr:[ \t]*/, "", tok); key = "pr:" tok
         }
-        if (match(line, /date:[ \t]*[0-9]{4}-[0-9]{2}-[0-9]{2}/)) {
-          tok = substr(line, RSTART, RLENGTH)
-          sub(/date:[ \t]*/, "", tok); date = tok
-        }
-        if (pr != "") {
+        if (key != "") {
           occ++
-          if (!(pr in seen_pr)) { seen_pr[pr] = 1; distinct_pr++ }
+          if (!(key in seen)) { seen[key] = 1; distinct++ }
         }
         next
       }
       END {
         if (slug == "" || status != "active") exit
-        if (occ >= 3 && distinct_pr >= 2) print slug
+        if (occ >= 3 && distinct >= 2) print slug
       }
     ' "$f"
   done
@@ -61,7 +63,7 @@ shown=$(printf '%s\n' "$candidates" | grep -v '^$' | head -n 5)
 count=$(printf '%s\n' "$candidates" | grep -vc '^$')
 [ "$count" -gt 0 ] || exit 0
 
-printf '【review-learnings】卒業候補の知見が %s 件あります（観測 3 以上・2 PR 以上・active）。\n' "$count"
+printf '【review-learnings】卒業候補の知見が %s 件あります（観測 3 以上・異なる観測元 2 以上・active）。\n' "$count"
 printf '%s\n' "$shown" | while IFS= read -r s; do
   [ -n "$s" ] && printf -- '- %s （docs/learnings/%s.md）\n' "$s" "$s"
 done
