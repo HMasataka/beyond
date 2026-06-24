@@ -19,3 +19,8 @@
 
 アーキテクチャや設計上の意思決定は ADR に残す。
 書くタイミングや構成は `docs/adr/README.md` を参照する。
+
+## AGENTS.md と skill の管理
+
+規約は `AGENTS.md`、skill は `.agents` を正本とし、ツールごとのファイル（`CLAUDE.md` など）はシンボリックリンクにする。
+規約や skill のファイルを増やす・編集するときは `docs/adr/0009-agents-md-symlink.md` を参照する。
