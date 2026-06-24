@@ -14,9 +14,11 @@ ledger_dir="$root/docs/learnings"
 candidates=$(
   for f in "$ledger_dir"/*.md; do
     [ -f "$f" ] || continue
-    case "$(basename "$f")" in
-      README.md|_template.md) continue ;;
-    esac
+    # case ... ;; を $() 内に置くと bash 3.2 が parse エラーになるため if を使う。
+    base=$(basename "$f")
+    if [ "$base" = "README.md" ] || [ "$base" = "_template.md" ]; then
+      continue
+    fi
     awk '
       function trim(s) { sub(/^[ \t]+/, "", s); sub(/[ \t]+$/, "", s); return s }
       BEGIN { fm = 0; slug = ""; status = ""; occ = 0; distinct = 0 }

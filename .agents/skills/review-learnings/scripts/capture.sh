@@ -12,6 +12,7 @@ title=""
 rule=""
 why=""
 scopes=""
+status=""
 
 die() { printf 'capture: %s\n' "$1" >&2; exit 1; }
 
@@ -26,6 +27,7 @@ while [ $# -gt 0 ]; do
     --rule)   rule="$2";   shift 2 ;;
     --why)    why="$2";    shift 2 ;;
     --scope)  scopes="$scopes $2"; shift 2 ;;
+    --status) status="$2"; shift 2 ;;
     *) die "unknown argument: $1" ;;
   esac
 done
@@ -45,6 +47,13 @@ fi
 
 printf '%s' "$slug" | grep -Eq '^[a-z0-9]+(-[a-z0-9]+)*$' || die "slug must be kebab-case: $slug"
 printf '%s' "$date" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' || die "date must be YYYY-MM-DD: $date"
+
+# promoted/retired は capture では設定させない（status 遷移は人手のみ）。
+[ -n "$status" ] || status="active"
+case "$status" in
+  active|pending) ;;
+  *) die "status must be active or pending: $status" ;;
+esac
 
 case "$origin" in
   pr)
@@ -111,7 +120,7 @@ fi
   printf 'slug: %s\n' "$slug"
   printf 'scope:\n'
   for s in $scopes; do printf -- '  - %s\n' "$s"; done
-  printf 'status: active\n'
+  printf 'status: %s\n' "$status"
   printf 'occurrences:\n'
   printf '%s\n' "$occ_line"
   printf -- '---\n'
