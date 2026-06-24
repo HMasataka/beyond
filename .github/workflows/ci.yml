@@ -35,3 +35,23 @@ jobs:
       # Go と web のテストをまとめて実行する。ツールは flake の devShell から供給する。
       - name: Test (Go + web)
         run: nix develop --command task test
+
+  gen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+
+      # gen:web（openapi-typescript）は node_modules を要するため lockfile 固定でインストールする。
+      - name: Install web deps
+        run: nix develop --command pnpm --dir web install --frozen-lockfile
+
+      # OpenAPI から再生成し、生成物に差分が出たら fail させる（コミット忘れの検出）。
+      - name: Check generated code is up to date
+        run: |
+          nix develop --command task gen
+          if ! git diff --exit-code; then
+            echo "::error::生成コードが古いです。'task gen' を実行して結果をコミットしてください。"
+            exit 1
+          fi
