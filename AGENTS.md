@@ -20,6 +20,11 @@
 アーキテクチャや設計上の意思決定は ADR に残す。
 書くタイミングや構成は `docs/adr/README.md` を参照する。
 
+## レビュー知見
+
+ADR 未満の繰り返しの指摘・気づきは `docs/learnings/` の台帳に貯め、再発が閾値を超えたら卒業（lint/ADR/style）を検討する。
+運用は `docs/learnings/README.md`、記録には review-learnings skill を使う。
+
 ## AGENTS.md と skill の管理
 
 規約は `AGENTS.md`、skill は `.agents` を正本とし、ツールごとのファイル（`CLAUDE.md` など）はシンボリックリンクにする。
