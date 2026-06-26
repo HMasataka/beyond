@@ -7,9 +7,14 @@ import (
 	"fmt"
 
 	"github.com/HMasataka/beyond/internal/config"
+	"github.com/HMasataka/beyond/internal/domain"
 	"github.com/HMasataka/beyond/internal/handler"
 	"github.com/HMasataka/beyond/internal/infra/database"
 )
+
+// infra は domain を import できないため、TxManager が domain.Transactor を満たすことは
+// 合成ルートのこのアサートで担保する。
+var _ domain.Transactor = (*database.TxManager)(nil)
 
 // New は依存を結線し、集約 Server と解放用の cleanup を返す。
 // cleanup は呼び出し側が停止後に呼ぶ（DB 接続を閉じる）。
