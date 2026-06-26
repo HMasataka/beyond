@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+remote_main="origin/main"
+
+# origin/main が無い環境（未 fetch など）では範囲を決められないためスキップし、CI を最終関門に委ねる。
+git rev-parse --verify --quiet "$remote_main" >/dev/null || exit 0
+
+base=$(git merge-base "$remote_main" HEAD)
+
+# base..HEAD が空（main 上や origin/main 先頭での push）なら検査対象がないので抜ける。
+[ "$base" = "$(git rev-parse HEAD)" ] && exit 0
+
+pnpm exec commitlint --from "$base" --to HEAD --verbose
