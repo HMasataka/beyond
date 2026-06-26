@@ -61,6 +61,12 @@ web の依存はテスト・ビルド前に取得する。
 pnpm --dir web install
 ```
 
+ルートでも依存を取得する。commitlint と、コミット時に規約を検査する husky の `commit-msg` フックが入る。
+
+```sh
+pnpm install
+```
+
 ## 開発
 
 API と web の開発サーバをまとめて起動する。

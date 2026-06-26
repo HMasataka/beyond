@@ -1,0 +1,20 @@
+name: PR Title
+
+# PR タイトルを Conventional Commits 準拠で検査する。
+# merge コミット運用ではタイトルが履歴に直接残らないが、squash merge へ切り替えても
+# そのまま使えるよう、コミット規約と同じ語彙でタイトルを揃えておく。
+on:
+  pull_request:
+    # タイトルだけを編集したときも再検査できるよう edited を含める。
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
