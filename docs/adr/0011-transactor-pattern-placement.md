@@ -1,9 +1,9 @@
-# 0011. transactor パターンで層をまたぐトランザクション境界を置く
+# ADR-0011: transactor パターンで層をまたぐトランザクション境界を置く
 
 - ステータス: Accepted
 - 日付: 2026-06-26
 
-## コンテキスト
+## 背景
 
 複数の repository をまたぐ操作を 1 つの DB トランザクションにまとめたい。
 オニオンアーキテクチャ（ADR 0004）と depguard による依存方向の強制（ADR 0007）の下では、トランザクション境界をどの層に置き、tx の有無判定（同じ ctx 内ですでに tx があればそれを使い、なければ開始する）をどこに集約するかの規約がない。
@@ -39,13 +39,19 @@ userUsecase := usecase.NewUserUsecase(transactor, userRepository)
 
 これにより、境界の interface（`domain.Transactor`）と実行口の interface（`database.DBProvider`）が別の層に分かれていても、結線時には同じ具象を指す。
 
-## 結果
+## 結果/影響
 
 - トランザクション境界が `domain.Transactor` として usecase から見え、実行口が `database.DBProvider` として repository から見える。どの層が何に依存するかが型で明示される。
 - tx の有無による分岐が `TxManager` に 1 箇所だけ存在する。repository は `Executor(ctx)` を呼ぶだけで、tx 中かどうかを意識しない。
 - テストでは責務を分けて差し替えられる。usecase は `domain.Transactor` のモックで境界の呼び出しを検証し、repository は `TxManager` 本実装に実 DB を渡して実行口を検証する。
-- 制約として、infra は domain を import できないため、`TxManager` が `domain.Transactor` を満たすことは同一シグネチャによる構造的充足に頼る。合成ルートの di が全層を import できるため、di に `var _ domain.Transactor = (*database.TxManager)(nil)` を置き、シグネチャ drift をコンパイル時に検出する。
-- 制約として、tx は ctx 経由で暗黙に運ばれる。`Do` が張った tx を `Executor` が ctx から取り出す流れは型に現れず、規約として理解する必要がある。
-- この配置に対し、3 interface すべてを 1 パッケージに平置きする案も検討したが採らない。`Transactor` を domain 以外に置くと usecase から参照できず（usecase は domain 以外を deny）、domain に置くと `DBTX`・`DBProvider` が `database/sql` を持ち込んで domain を技術詳細に依存させ、かつ具象 `TxManager` を infra に置けなくなる（infra は domain を import できない）。depguard と衝突する。
+
+## 検討した代替案
+
+- 3 interface すべてを 1 パッケージに平置きする案も検討したが採らない。`Transactor` を domain 以外に置くと usecase から参照できず（usecase は domain 以外を deny）、domain に置くと `DBTX`・`DBProvider` が `database/sql` を持ち込んで domain を技術詳細に依存させ、かつ具象 `TxManager` を infra に置けなくなる（infra は domain を import できない）。depguard と衝突する。
+
+## 注意点
+
+- infra は domain を import できないため、`TxManager` が `domain.Transactor` を満たすことは同一シグネチャによる構造的充足に頼る。合成ルートの di が全層を import できるため、di に `var _ domain.Transactor = (*database.TxManager)(nil)` を置き、シグネチャ drift をコンパイル時に検出する。
+- tx は ctx 経由で暗黙に運ばれる。`Do` が張った tx を `Executor` が ctx から取り出す流れは型に現れず、規約として理解する必要がある。
 
 関連 ADR: [0004](0004-api-onion-architecture.md)、[0007](0007-depguard-architecture-enforcement.md)。
